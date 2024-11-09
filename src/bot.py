@@ -4,10 +4,22 @@ import os
 from dotenv import load_dotenv
 import datetime
 import pytz
+import pickle
 
 TOTAL_COFFEES = {}   
 USERNAMES = {}
 
+try:
+    with open('total_coffees.pkl', 'rb') as f:
+        TOTAL_COFFEES = pickle.load(f)
+except FileNotFoundError:
+    TOTAL_COFFEES = {}
+    
+try:
+    with open('usernames.pkl', 'rb') as f:
+        USERNAMES = pickle.load(f)
+except FileNotFoundError:
+    USERNAMES = {}
        
 async def coffee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
@@ -19,9 +31,17 @@ async def coffee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         USERNAMES[user_id] = update.effective_user.first_name
         TOTAL_COFFEES[user_id] = []
     TOTAL_COFFEES[user_id].append(datetime.date.today().strftime("%Y-%m-%d"))
+    
+    # Save the dictionary to a file
+    with open('usernames.pkl', 'wb') as f:
+        pickle.dump(USERNAMES, f)
+    
+    with open('total_coffees.pkl', 'wb') as f:
+        pickle.dump(TOTAL_COFFEES, f)
+        
     today = datetime.date.today().strftime("%Y-%m-%d")
     coffees_today = [coffee for coffee in TOTAL_COFFEES[user_id] if coffee.startswith(today)]
-    await update.message.reply_text(f'{update.effective_user.first_name}, you have drunk {len(coffees_today)} coffees today {'☕'*len(coffees_today)}')
+    await update.message.reply_text(f'{update.effective_user.first_name}, you have drunk {len(coffees_today)} coffees today {"☕"*len(coffees_today)}')
     
 async def uncoffee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
@@ -35,7 +55,7 @@ async def uncoffee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if today in TOTAL_COFFEES[user_id]:
         TOTAL_COFFEES[user_id].remove(today)
     coffees_today = [coffee for coffee in TOTAL_COFFEES[user_id] if coffee.startswith(today)]
-    await update.message.reply_text(f'{update.effective_user.first_name}, you have drunk {len(coffees_today)} coffees today {'☕'*len(coffees_today)}')
+    await update.message.reply_text(f'{update.effective_user.first_name}, you have drunk {len(coffees_today)} coffees today {"☕"*len(coffees_today)}')
 
 
 async def month(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
