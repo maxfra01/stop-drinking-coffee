@@ -1,0 +1,15 @@
+☕ Stop Drinking Coffee Bot ☕
+
+Keep track of your daily coffee intake, get monthly summaries, and see your total coffee count. Here's what I can do:
+
+- Track Daily Coffees: Just let me know each time you have a coffee, and I'll log it for the day!
+
+- Monthly Coffee Count: Check your coffee count for the current month at any time by asking, and I'll show you how many coffees you've had so far.
+
+- Total Coffee Count: Curious about your all-time coffee intake? I'll show you the grand total whenever you need it.
+
+- Monthly Recap: At the end of each month, I'll send a summary of the month's coffee count.
+
+- Stay tuned for new functionalities
+
+Happy caffeinating! ☕
