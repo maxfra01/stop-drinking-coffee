@@ -54,6 +54,14 @@ async def uncoffee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     today = datetime.date.today().strftime("%Y-%m-%d")
     if today in TOTAL_COFFEES[user_id]:
         TOTAL_COFFEES[user_id].remove(today)
+        
+       # Save the dictionary to a file
+    with open('usernames.pkl', 'wb') as f:
+        pickle.dump(USERNAMES, f)
+    
+    with open('total_coffees.pkl', 'wb') as f:
+        pickle.dump(TOTAL_COFFEES, f)
+        
     coffees_today = [coffee for coffee in TOTAL_COFFEES[user_id] if coffee.startswith(today)]
     await update.message.reply_text(f'{update.effective_user.first_name}, you have drunk {len(coffees_today)} coffees today {"☕"*len(coffees_today)}')
 
@@ -137,6 +145,8 @@ def main():
     # Create the bot
     app = ApplicationBuilder().token(token).build()
     
+    
+    #app.add_handler(CommandHandler("start", info))
     app.add_handler(CommandHandler("coffee", coffee))
     app.add_handler(CommandHandler("uncoffee", uncoffee))
     app.add_handler(CommandHandler("month", month))
